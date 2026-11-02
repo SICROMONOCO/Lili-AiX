@@ -1,0 +1,10 @@
+[package]
+name = "provider-kit"
+description = "Shared by the providers: HTTP through the host, caching, HTML and title-matching helpers"
+version = "1.0.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+serde_json = "1"
+wit-bindgen = "0.62"

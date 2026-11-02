@@ -1,0 +1,154 @@
+mpv's MoltenVK context, as MPVKit adds it (0001-player-add-moltenvk-context.patch), made fit for
+an app that owns the layer. Applied after MPVKit's own patches by scripts/build-libmpv-macos.sh.
+
+- Resizes: the host sets the layer's drawableSize; the VO now notices (VOCTRL_CHECK_EVENTS,
+  polled at least every 50 ms) and resizes the swapchain and mpv's idea of the window. Before,
+  only a new video did, so the picture kept its old size inside a resized window.
+- HiDPI: reports the layer's contentsScale.
+- HDR: the host stores the screen's EDR headroom on the layer ("mpvEDRHeadroom"); above 1 the
+  display's colour space is reported as PQ, so --target-colorspace-hint=auto passes HDR
+  through on HDR screens and leaves SDR screens alone.
+
+diff --git a/video/out/vulkan/context_moltenvk.m b/video/out/vulkan/context_moltenvk.m
+index 445b907..b95f8a9 100644
+--- a/video/out/vulkan/context_moltenvk.m
++++ b/video/out/vulkan/context_moltenvk.m
+@@ -15,17 +15,37 @@
+  * License along with mpv.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++#include <math.h>
++
+ #include <CoreGraphics/CoreGraphics.h>
+ #include <QuartzCore/CAMetalLayer.h>
+ #include <MoltenVK/mvk_vulkan.h>
+ 
++#include "osdep/timer.h"
++#include "video/out/vo.h"
++
+ #include "common.h"
+ #include "context.h"
+ #include "utils.h"
+ 
++// The host application owns the layer (passed as --wid) and keeps its
++// drawableSize at its view's size in pixels. Nothing tells mpv when that
++// changes, so the VO compares it on every iteration of its loop, and wakes at
++// least this often while it has nothing else to do (paused, idle).
++#define RESIZE_POLL_MS 50
++
++// The host may store its screen's EDR headroom on the layer under this key
++// (NSScreen's maximumPotentialExtendedDynamicRangeColorComponentValue, as an
++// NSNumber). Above 1 the display can show HDR, which lets
++// --target-colorspace-hint=auto signal it; otherwise nothing is signalled and
++// HDR is tone-mapped to SDR as before.
++static NSString *const edr_headroom_key = @"mpvEDRHeadroom";
++
+ struct priv {
+     struct mpvk_ctx vk;
+     CAMetalLayer *layer;
++    // The drawable size the swapchain was last sized to.
++    int width, height;
+ };
+ 
+ static void moltenvk_uninit(struct ra_ctx *ctx)
+@@ -35,6 +55,37 @@ static void moltenvk_uninit(struct ra_ctx *ctx)
+     mpvk_uninit(&p->vk);
+ }
+ 
++// MoltenVK briefly sets a 1x1 drawable to force a presentation through; hosts
++// filter that out, and it is never a real size.
++static bool layer_size(struct priv *p, int *width, int *height)
++{
++    CGSize size = p->layer.drawableSize;
++    *width = (int)size.width;
++    *height = (int)size.height;
++    return *width > 1 && *height > 1;
++}
++
++static struct pl_color_space moltenvk_preferred_csp(struct ra_ctx *ctx)
++{
++    struct priv *p = ctx->priv;
++    double headroom = 0;
++    @autoreleasepool {
++        id value = [p->layer valueForKey:edr_headroom_key];
++        if ([value isKindOfClass:[NSNumber class]])
++            headroom = [value doubleValue];
++    }
++    if (!isfinite(headroom) || headroom <= 1.0)
++        return (struct pl_color_space){0};
++
++    // EDR headroom is relative to SDR white, which macOS's HDR displays put at
++    // about 100 nits (the XDR panels' 1600 nits are a headroom of 16).
++    return (struct pl_color_space){
++        .primaries = PL_COLOR_PRIM_BT_2020,
++        .transfer = PL_COLOR_TRC_PQ,
++        .hdr.max_luma = fmin(headroom * 100.0, 10000.0),
++    };
++}
++
+ static bool moltenvk_init(struct ra_ctx *ctx)
+ {
+     struct priv *p = ctx->priv = talloc_zero(ctx, struct priv);
+@@ -55,7 +106,9 @@ static bool moltenvk_init(struct ra_ctx *ctx)
+          .pLayer = p->layer,
+     };
+ 
+-    struct ra_ctx_params params = {0};
++    struct ra_ctx_params params = {
++        .preferred_csp = moltenvk_preferred_csp,
++    };
+ 
+     VkInstance inst = vk->vkinst->instance;
+     VkResult res = vkCreateMetalSurfaceEXT(inst, &info, NULL, &vk->surface);
+@@ -76,21 +129,49 @@ fail:
+ static bool moltenvk_reconfig(struct ra_ctx *ctx)
+ {
+     struct priv *p = ctx->priv;
+-    CGSize s = p->layer.drawableSize;
+-    ra_vk_ctx_resize(ctx, s.width, s.height);
++    int width, height;
++    // Not laid out yet: the next size check sizes the swapchain.
++    if (!layer_size(p, &width, &height))
++        return true;
++    p->width = width;
++    p->height = height;
++    ra_vk_ctx_resize(ctx, width, height);
+     return true;
+ }
+ 
+ static int moltenvk_control(struct ra_ctx *ctx, int *events, int request, void *arg)
+ {
++    struct priv *p = ctx->priv;
++    switch (request) {
++    case VOCTRL_CHECK_EVENTS: {
++        int width, height;
++        if (layer_size(p, &width, &height) && (width != p->width || height != p->height)) {
++            p->width = width;
++            p->height = height;
++            ra_vk_ctx_resize(ctx, width, height);
++            *events |= VO_EVENT_RESIZE | VO_EVENT_EXPOSE;
++        }
++        return VO_TRUE;
++    }
++    case VOCTRL_GET_HIDPI_SCALE:
++        *(double *)arg = p->layer.contentsScale;
++        return VO_TRUE;
++    }
+     return VO_NOTIMPL;
+ }
+ 
++static void moltenvk_wait_events(struct ra_ctx *ctx, int64_t until_time_ns)
++{
++    int64_t poll = mp_time_ns() + MP_TIME_MS_TO_NS(RESIZE_POLL_MS);
++    vo_wait_default(ctx->vo, MPMIN(until_time_ns, poll));
++}
++
+ const struct ra_ctx_fns ra_ctx_vulkan_moltenvk = {
+     .type           = "vulkan",
+     .name           = "moltenvk",
+     .reconfig       = moltenvk_reconfig,
+     .control        = moltenvk_control,
++    .wait_events    = moltenvk_wait_events,
+     .init           = moltenvk_init,
+     .uninit         = moltenvk_uninit,
+ };

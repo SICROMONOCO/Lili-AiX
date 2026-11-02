@@ -1,0 +1,33 @@
+{
+  "about": "anilili:// links (docs/LINKS.md). Desktop: crates/core/src/links.rs. Android reads none yet; these are the cases it must answer the same way.",
+  "read": [
+    { "link": "anilili://anime/154587", "page": "anime", "id": 154587 },
+    { "link": "anilili://watch/154587/3", "page": "watch", "id": 154587, "episode": 3 },
+    { "link": "anilili://watch/21/6.5?t=754.2&from=android", "page": "watch", "id": 21, "episode": 6.5, "start": 754.2 },
+    { "link": "anilili://watch/21/2?t=-5", "page": "watch", "id": 21, "episode": 2, "note": "a t that isn't positive is ignored" },
+    { "link": "anilili://search?q=black%20clover", "page": "search", "query": "black clover" },
+    { "link": "anilili://search?q=Re%3AZero+%26+friends", "page": "search", "query": "Re:Zero & friends" },
+    { "link": "  ANILILI://anime/1/ ", "page": "anime", "id": 1 },
+    { "link": "anilili:///anime/1", "page": "anime", "id": 1 },
+    { "link": "anilili:anime/1", "page": "anime", "id": 1 }
+  ],
+  "refuse": [
+    "",
+    "https://anilist.co/anime/1",
+    "anilili://anime/",
+    "anilili://anime/abc",
+    "anilili://anime/-4",
+    "anilili://anime/1/2",
+    "anilili://watch/1",
+    "anilili://watch/1/x",
+    "anilili://search",
+    "anilili://search?q=%20",
+    "anilili://settings"
+  ],
+  "write": [
+    { "page": "anime", "id": 7, "link": "anilili://anime/7" },
+    { "page": "watch", "id": 21, "episode": 6.5, "start": 754.9, "link": "anilili://watch/21/6.5?t=754" },
+    { "page": "watch", "id": 21, "episode": 3, "link": "anilili://watch/21/3" },
+    { "page": "search", "query": "Re:Zero & friends", "link": "anilili://search?q=Re%3AZero+%26+friends" }
+  ]
+}

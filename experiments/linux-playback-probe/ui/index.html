@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux playback probe</title>
+    <link rel="stylesheet" href="probe.css">
+    <script src="probe.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <strong>Anilili Linux playback probe</strong>
+      <span id="heartbeat">UI heartbeat</span>
+    </header>
+    <aside id="panel" hidden>Video should move clear of this panel.</aside>
+    <footer>
+      <div class="controls">
+        <button data-action="pause">Play / pause</button>
+        <button data-action="seek">Seek +10 seconds</button>
+        <button id="panel-toggle">Side panel</button>
+        <button data-action="fullscreen">Fullscreen</button>
+      </div>
+      <output id="status">Connecting to native commands…</output>
+      <output id="browser"></output>
+      <output id="error"></output>
+    </footer>
+  </body>
+</html>

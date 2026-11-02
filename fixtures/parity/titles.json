@@ -1,0 +1,34 @@
+{
+  "about": "Title and season matching, which every provider uses to pick a site's entry for an AniList title. Expected answers are the Android app's (NativeProviderParsersTest.kt); the desktop's providers/kit must give the same.",
+  "seasonNumber": [
+    { "title": "Frieren: Beyond Journey's End Season 2", "expected": 2 },
+    { "title": "Naruto Shippuden Season 02 – Episodes", "expected": 2 },
+    { "title": "Kaguya-sama 3rd Season", "expected": 3 },
+    { "title": "The Ancient Magus' Bride II", "expected": 2 },
+    { "title": "KonoSuba 3", "expected": 3 },
+    { "title": "Gintama 2", "expected": 2 },
+    { "title": "Frieren: Beyond Journey's End", "expected": null },
+    { "title": "Demon Slayer Mugen Train Movie", "expected": null },
+    { "title": "Kaiju No. 8", "expected": null, "note": "a number that is part of the name is not a season" },
+    { "title": "Mob Psycho 100", "expected": null }
+  ],
+  "baseSeriesTitle": [
+    { "title": "Solo Leveling Season 2 -Arise from the Shadow-", "expected": "Solo Leveling" },
+    { "title": "Attack on Titan Final Season", "expected": "Attack on Titan" },
+    { "title": "Dandadan 2nd Season", "expected": "Dandadan" },
+    { "title": "Saga of Tanya the Evil Season 2", "expected": "Saga of Tanya the Evil" },
+    { "title": "Dandadan", "expected": "Dandadan", "note": "no marker, no change" },
+    { "title": "Frieren: Beyond Journey's End", "expected": "Frieren: Beyond Journey's End" }
+  ],
+  "titleScore": [
+    { "query": "Attack on Titan", "candidate": "Attack on Titan", "exactly": 1.0 },
+    { "query": "Re:Zero", "candidate": "ReZero Season 2", "above": 0.8 }
+  ],
+  "selectionOrder": [
+    {
+      "query": "Jujutsu Kaisen",
+      "better": "Jujutsu Kaisen (TV)",
+      "worse": "Jujutsu Kaisen: The Culling Game Part 1"
+    }
+  ]
+}

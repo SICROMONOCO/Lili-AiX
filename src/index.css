@@ -1,0 +1,312 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Geist Variable', sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  /* No visible scrollbars anywhere: the wheel, trackpad and keyboard still scroll, rows have their
+     own arrows, and the bars only drew grey tracks over the artwork. */
+  * {
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  /* Transparent all the way down: mpv paints the window under the webview. */
+  html,
+  body,
+  #root {
+    background: transparent;
+  }
+  body {
+    @apply text-foreground;
+    }
+  html {
+    @apply font-sans;
+    /* Dark native scrollbars and form controls in WebView2. */
+    color-scheme: dark;
+    }
+}
+/* The player's timeline (src/components/player/seek-bar.tsx): Android's marker amber for skip
+   windows, and its buffered band. Fixed colours, as on Android: they sit over any video. */
+:root {
+  --player-marker: #ffc14d;
+  --player-buffered: oklch(1 0 0 / 50%);
+}
+
+/* ---- Surfaces ---------------------------------------------------------------------------------
+   One look for every panel, chip and bar in the app: Android's "liquid glass" (Settings →
+   Appearance → Liquid glass), switchable per part as there. A part carries data-glass="on|off"
+   (the sidebar; <main>, by the page's part); inside it:
+     .surface          panels and cards (blurs what is behind it)
+     .surface-chip     badges and round buttons laid over artwork (blurs)
+     .surface-control  tiles and toggle chips (tinted only: a grid of hundreds must not blur)
+   Off, every one of them is the card fill, so a page without glass is solid, not see-through. */
+:root {
+  --surface: var(--card);
+  --surface-chip: var(--card);
+  --surface-control: var(--card);
+  --surface-blur: none;
+}
+[data-glass="on"] {
+  --surface: color-mix(in oklab, var(--card) 58%, transparent);
+  --surface-chip: color-mix(in oklab, var(--card) 50%, transparent);
+  --surface-control: color-mix(in oklab, var(--card) 66%, transparent);
+  --surface-blur: blur(24px) saturate(160%);
+}
+/* The sidebar: the same glass, from the sidebar's own colour. */
+[data-slot="app-nav"] {
+  background-color: var(--sidebar);
+}
+[data-slot="app-nav"][data-glass="on"] {
+  background-color: color-mix(in oklab, var(--sidebar) 60%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+/* macOS draws the window's own Liquid Glass under the webview whenever any page part has glass on
+   (src-tauri/src/glass.rs). The shell stops painting over it, a part with glass on lets it through
+   instead of imitating it, and a part with glass off stays a solid fill. */
+html[data-native-glass="on"] [data-slot="app-shell"][data-window-glass="on"] {
+  background-color: transparent;
+}
+html[data-native-glass="on"] [data-window-glass="on"] [data-slot="app-main"][data-glass="off"] {
+  background-color: var(--background);
+}
+html[data-native-glass="on"] [data-window-glass="on"] [data-slot="app-main"][data-glass="on"] {
+  --surface: color-mix(in oklab, var(--card) 36%, transparent);
+  --surface-control: color-mix(in oklab, var(--card) 44%, transparent);
+  background-color: color-mix(in oklab, var(--background) 30%, transparent);
+}
+html[data-native-glass="on"] [data-window-glass="on"] [data-slot="app-nav"][data-glass="on"] {
+  background-color: color-mix(in oklab, var(--sidebar) 22%, transparent);
+  backdrop-filter: none;
+}
+@utility surface {
+  background-color: var(--surface);
+  border-width: 1px;
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+@utility surface-bar {
+  background-color: var(--surface);
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+@utility surface-chip {
+  background-color: var(--surface-chip);
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+@utility surface-control {
+  background-color: var(--surface-control);
+  border-width: 1px;
+}
+/* Secondary buttons and badges take their part's glass too (unlayered, so hover is restated). */
+[data-glass="on"] :is([data-slot="button"][data-variant="secondary"], [data-slot="badge"][data-variant="secondary"]) {
+  background-color: var(--surface-chip);
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+[data-glass="on"] [data-slot="button"][data-variant="secondary"]:hover {
+  background-color: color-mix(in oklab, var(--card) 78%, transparent);
+}
+/* Popups render outside the pages, so their switch is on the document (src/lib/theme.ts).
+   `data-bare` marks a popup with no panel of its own (the dice), which the glass must not add. */
+html[data-glass-popups="on"]
+  :is(
+    [data-slot="dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="popover-content"],
+    [data-slot="hover-card-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"],
+    [data-slot="select-content"]
+  ):not([data-bare]) {
+  background-color: color-mix(in oklab, var(--popover) 72%, transparent);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+html[data-glass-popups="on"] :is([data-slot="dialog-overlay"], [data-slot="sheet-overlay"]) {
+  backdrop-filter: blur(6px);
+}
+html[data-glass-popups="off"] :is([data-slot="dialog-overlay"], [data-slot="sheet-overlay"]) {
+  backdrop-filter: none;
+  background-color: oklch(0 0 0 / 50%);
+}
+
+/* Linux: WebKitGTK repaints every blurred panel whenever anything under it moves, and the first
+   Linux users found the whole app slow and its popups flickering. The glass keeps its tint there
+   and drops the blur. */
+html[data-platform="linux"] *,
+html[data-platform="linux"] *::before,
+html[data-platform="linux"] *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* Unblurred, a translucent popup lets the text under it through its own: popups go solid. */
+html[data-platform="linux"][data-glass-popups="on"]
+  :is(
+    [data-slot="dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="popover-content"],
+    [data-slot="hover-card-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"],
+    [data-slot="select-content"]
+  ):not([data-bare]) {
+  background-color: var(--popover);
+}
+
+/* The shell's activity bar (app-shell.tsx): an indeterminate sweep while anything loads. */
+@keyframes activity-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* The player's episode list (episode-drawer.tsx): Android's equalizer on the episode playing, each
+   bar with its own speed and peak. */
+@keyframes equalizer {
+  from {
+    transform: scaleY(0.2);
+  }
+  to {
+    transform: scaleY(var(--bar-peak));
+  }
+}
+
+@utility equalizer-bar {
+  transform-origin: bottom;
+  transform: scaleY(var(--bar-peak));
+  animation: equalizer var(--bar-ms) cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

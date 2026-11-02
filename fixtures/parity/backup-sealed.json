@@ -1,0 +1,24 @@
+{
+  "about": "A backup whose logins were sealed by an independent implementation (Python `cryptography`: PBKDF2-HMAC-SHA256, AES-GCM with the tag appended, as Java's Cipher writes it). Both apps must open `file` with `passphrase` and find `expect`. Desktop: crates/core/src/backup.rs; Android: BackupCrypto.kt.",
+  "passphrase": "K7M4-9QXR",
+  "expect": {
+    "anilistToken": "android-token",
+    "malHandoff": true,
+    "malIssuedAt": 42
+  },
+  "file": {
+    "format": "anilili-backup",
+    "version": 1,
+    "credentials": {
+      "kdf": "pbkdf2-hmac-sha256",
+      "iterations": 1000,
+      "salt": "AAECAwQFBgcICQoLDA0ODw==",
+      "iv": "ZGVmZ2hpamtsbW5v",
+      "ciphertext": "Zz+y/c4/K5qMD36BNcQpLrOEo/e+MdmrOMYCK6M/gl0KYoDaq2bnMm0QfzncRL2Z41vBCOyqaYKxcWumiigIoYEr0RDdkU+dF2lxMGLLpAYidFr8I1jlkLDRa6lcsN+aMdo7/qkG/ENTiK7FmG9Pxr/8FwG5ZrOd7vIsbjhHo9Qut85yKRr3tzE6o4/+AyWLKNfAO0SLNE9QYGjlAw==",
+      "services": [
+        "anilist",
+        "mal"
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+[package]
+name = "provider-zoko"
+description = "Zoko (zokoanime.video): MAL-keyed embed page, XOR'd player config, plain HLS"
+version = "1.0.0"
+edition.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+provider-kit = { path = "../kit" }
+serde_json = "1"
+wit-bindgen = "0.62"

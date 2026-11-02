@@ -1,0 +1,13 @@
+[package]
+name = "provider-animeheaven"
+description = "AnimeHeaven: search, episode list, gate page → ungated progressive MP4 (hardsub)"
+version = "1.0.0"
+edition.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+provider-kit = { path = "../kit" }
+wit-bindgen = "0.62"

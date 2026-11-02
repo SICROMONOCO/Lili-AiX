@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- wasmtime maps the providers' compiled code executable (without MAP_JIT); the hardened
+         runtime kills the process at the first call otherwise ("Code Signature Invalid"). -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <!-- libmpv and its dylibs are signed by whoever built them, not by us, and LGPL wants users
+         able to swap them. -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>

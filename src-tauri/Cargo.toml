@@ -1,0 +1,70 @@
+[package]
+name = "anilili-desktop"
+description = "Anilili for Windows and macOS"
+version = "0.1.6"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[build-dependencies]
+tauri-build = { version = "=3.0.0-alpha.3", features = [] }
+
+[dependencies]
+# Tauri 3 is alpha: pin exact versions and move them together.
+tauri = { version = "=3.0.0-alpha.4", features = [] }
+tauri-runtime-wry = "=3.0.0-alpha.4"
+raw-window-handle = "0.6"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# The OpenSubtitles password, in the system's credential store (Credential Manager, the keychain).
+keyring = { version = "3", features = ["windows-native", "apple-native", "linux-native-sync-persistent", "crypto-rust"] }
+log = "0.4"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+anilili-mpv = { path = "../crates/mpv" }
+anilili-core = { path = "../crates/core" }
+# Replays of webview-earned clearance (clearance.rs); the client itself comes from anilili-core.
+wreq = { version = "0.16.1", default-features = false }
+url = "2"
+rand = "0.9"
+# The usage ping's salted device ID (usage.rs).
+sha2 = "0.10"
+flate2 = "1"
+discord-rich-presence = "1.1"
+tokio = { version = "1", features = ["sync", "macros", "time", "rt"] }
+tauri-plugin-single-instance = "=3.0.0-alpha.2"
+# `anilili://` links: its config is what makes the installer register the scheme (tauri.conf.json).
+# Links arrive as arguments, handled in main.rs.
+tauri-plugin-deep-link = "=3.0.0-alpha.2"
+tauri-plugin-window-state = "=3.0.0-alpha.2"
+souvlaki = "0.8"
+
+[target.'cfg(unix)'.dependencies]
+# Free disk space for downloads (statvfs).
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+# Embed ad blocking hooks WebView2 directly (adblock.rs); the versions tauri-runtime-wry uses.
+webview2-com = "0.39"
+# Toast notifications (notify.rs) are WinRT.
+windows = { version = "0.62", features = ["Data_Xml_Dom", "Foundation", "UI_Notifications"] }
+# The title bar's colours (DWM), free disk space (downloads), the see-through browser bridge, and
+# the machine's ID for the usage ping (the registry).
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Graphics_Dwm", "Win32_Storage_FileSystem", "Win32_System_Registry", "Win32_UI_WindowsAndMessaging"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+# The video surface under the webview (player_linux.rs): GTK 3 + WebKitGTK 4.1, the
+# versions the pinned Tauri runtime uses. libloading resolves GL at runtime.
+gtk = "=0.18.2"
+libloading = "0.8"
+# The webview's own user agent, for clearance replays (clearance.rs); the version Wry uses.
+webkit2gtk = "=2.0.2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# The video layer under the webview (player_mac.rs): a CAMetalLayer mpv presents into through
+# MoltenVK. The versions Tauri's own AppKit code uses.
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSArray", "NSEnumerator", "NSGeometry", "NSObject", "NSString", "NSThread", "NSValue"] }
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSResponder", "NSView", "NSWindow", "NSGraphics", "NSScreen", "objc2-core-foundation"] }
+objc2-quartz-core = { version = "0.3", default-features = false, features = ["std", "CALayer", "CAMetalLayer", "objc2-core-foundation"] }

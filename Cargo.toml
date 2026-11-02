@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "src-tauri"]
+exclude = ["providers"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.99"
+
+# The embed ad-block engine checks every request an embed makes: 8 ms each unoptimised, 3 µs optimised.
+[profile.dev.package.adblock]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"

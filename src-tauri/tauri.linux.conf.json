@@ -1,0 +1,25 @@
+{
+  "bundle": {
+    "targets": [
+      "deb"
+    ],
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libgtk-3-0t64",
+          "libmpv2"
+        ]
+      }
+    },
+    "resources": {
+      "../vendor/libmpv/win32-x64/libmpv-2.dll": null,
+      "../vendor/libmpv/win32-x64/vulkan-1.dll": null,
+      "../vendor/libmpv/win32-x64/VulkanRT-License.txt": null,
+      "../vendor/libmpv/linux-x64/": "libmpv/",
+      "../vendor/shaders/": "shaders/",
+      "../vendor/providers/": "providers/",
+      "../vendor/filters/": "filters/"
+    }
+  }
+}

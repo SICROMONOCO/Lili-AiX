@@ -1,0 +1,43 @@
+[package]
+name = "anilili-core"
+description = "Catalogue, sources, storage and the stream proxy. No Tauri: any front end can use it."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+# Embed ad blocking: Brave's filter-list engine (EasyList syntax, uBlock extensions). Not single-thread,
+# so one engine serves the webview hook and the list refresh.
+adblock = { version = "0.13.3", default-features = false, features = ["embedded-domain-resolver", "full-regex-handling"] }
+aes = "0.8"
+# Backup logins, sealed as the Android app seals them (PBKDF2-HMAC-SHA256, AES-256-GCM).
+aes-gcm = "0.10"
+base64 = "0.22"
+hmac = "0.12"
+cbc = { version = "0.1", features = ["alloc"] }
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio", "query"] }
+bytes = "1"
+flate2 = "1"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+k256 = { version = "0.13", features = ["schnorr"] }
+sha2 = "0.10"
+rand = "0.9"
+regex = "1"
+rusqlite = { version = "0.40", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "sync", "time"] }
+tracing = "0.1"
+url = "2"
+# Browser-grade TLS/HTTP2 fingerprints (BoringSSL). Needs CMake, NASM and clang to build.
+wreq = { version = "0.16.1", features = ["gzip", "brotli", "zstd", "deflate", "json", "stream"] }
+wreq-util = "0.2.0"
+wasmtime = { version = "49", default-features = false, features = ["async", "component-model", "cranelift", "runtime", "std", "parallel-compilation", "cache"] }
+wasmtime-wasi = { version = "49", default-features = false, features = ["p2"] }
+
+[dev-dependencies]
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+anilili-mpv = { path = "../mpv" }

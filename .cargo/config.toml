@@ -1,0 +1,5 @@
+# wreq's TLS (btls-sys) builds against our prepared BoringSSL: btls's patches plus
+# patches/boringssl-mldsa-sigalgs.patch. Prepare it with `node scripts/prepare-boringssl.mjs`.
+[env]
+BORING_BSSL_SOURCE_PATH = { value = "vendor/boringssl", relative = true }
+BORING_BSSL_ASSUME_PATCHED = "1"

@@ -1,0 +1,16 @@
+# Build output
+target/
+/dist/
+node_modules/
+
+# Third-party binaries, fetched by scripts/fetch-libmpv.mjs
+/vendor/
+
+# Tauri generated
+/src-tauri/gen/
+
+# Secrets never live in this repo; they belong in ../anilili-private/
+*.key
+*.pem
+*.p12
+.env*

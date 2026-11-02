@@ -1,0 +1,12 @@
+{
+  "productName": "Anilili Linux playback probe",
+  "version": "0.0.0",
+  "identifier": "app.anilili.linux-probe",
+  "build": { "frontendDist": "ui" },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [],
+    "security": { "csp": "default-src 'self'; script-src 'self'; style-src 'self'" }
+  },
+  "bundle": { "active": false, "icon": ["../../src-tauri/icons/32x32.png"] }
+}

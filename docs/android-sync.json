@@ -1,0 +1,5 @@
+{
+  "android": "5e2adc4a",
+  "date": "2026-10-04",
+  "note": "Where the desktop's provider ports (2026-10-04) were taken from. Android changes after this are what the ledger lists; earlier Android-only features (Home recommendations, the dice) were never part of the port."
+}

@@ -1,0 +1,99 @@
+package anilili:provider@1.0.0;
+
+/// What the app lends a provider. There is no other way out: no sockets, no files.
+interface host {
+    record request {
+        method: string,
+        url: string,
+        headers: list<tuple<string, string>>,
+        body: option<list<u8>>,
+    }
+
+    record response {
+        status: u16,
+        headers: list<tuple<string, string>>,
+        body: list<u8>,
+    }
+
+    /// HTTP through the app's client (Chrome TLS/HTTP2 fingerprint), limited to the hosts the
+    /// provider declared in `info.hosts`.
+    http: func(req: request) -> result<response, string>;
+
+    /// The same request made *inside* a browser page on `origin` (the app's webview), with that
+    /// page's cookies and engine: for sites behind a JavaScript challenge (Cloudflare's "Just a
+    /// moment…") that no plain client passes. Slower (seconds); use only where `http` is refused.
+    /// Limited to the provider's declared hosts, like `http`.
+    browser-fetch: func(origin: string, req: request) -> result<response, string>;
+
+    log: func(message: string);
+
+    /// A small persistent cache, private to the provider (stored by the app). For expensive steps
+    /// that rarely change, like matching a title or an episode list.
+    cache-get: func(key: string) -> option<string>;
+    cache-set: func(key: string, value: string, ttl-seconds: u32);
+}
+
+interface types {
+    /// The episode the app wants, keyed by AniList (the app's catalogue).
+    record title {
+        anilist-id: u32,
+        mal-id: option<u32>,
+        /// English, romaji, native and synonyms, best first: for providers that match by name.
+        titles: list<string>,
+        episode: f64,
+        dub: bool,
+    }
+
+    record media-stream {
+        url: string,
+        /// `hls`, `mp4` or `dash`.
+        format: string,
+        quality: option<string>,
+        height: option<u32>,
+    }
+
+    record subtitle {
+        url: string,
+        label: string,
+        language: string,
+    }
+
+    record server {
+        name: string,
+        dub: bool,
+        headers: list<tuple<string, string>>,
+        streams: list<media-stream>,
+        subtitles: list<subtitle>,
+        /// (start, end) seconds.
+        skip-intro: option<tuple<f64, f64>>,
+        skip-outro: option<tuple<f64, f64>>,
+        /// The seek bar's previews: a WebVTT storyboard whose cues name a sprite sheet and a
+        /// `#xywh=` tile. Fetched with `headers`, like the stream.
+        thumbnails: option<string>,
+    }
+
+    record info {
+        /// Stable key, e.g. `anipm`.
+        id: string,
+        /// Shown in the server menu.
+        name: string,
+        version: string,
+        /// Hosts (and their subdomains) `http` may reach.
+        hosts: list<string>,
+    }
+}
+
+world provider {
+    use types.{title, server, info};
+    import host;
+
+    export info: func() -> info;
+    export servers: func(title: title) -> result<list<server>, string>;
+}
+
+/// The imports alone, for the providers' shared helper crate (`providers/kit`), whose bindings
+/// each provider reuses. Not a component of its own.
+world kit {
+    import host;
+    import types;
+}

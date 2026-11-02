@@ -1,0 +1,16 @@
+{
+  "bundle": {
+    "targets": ["app", "dmg"],
+    "resources": {
+      "../vendor/libmpv/win32-x64/libmpv-2.dll": null,
+      "../vendor/libmpv/win32-x64/vulkan-1.dll": null,
+      "../vendor/libmpv/win32-x64/VulkanRT-License.txt": null,
+      "../vendor/libmpv/darwin-arm64/": "libmpv/"
+    },
+    "macOS": {
+      "minimumSystemVersion": "12.0",
+      "signingIdentity": "-",
+      "entitlements": "entitlements.mac.plist"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# Applied byte-for-byte to CRLF sources by scripts/prepare-boringssl.mjs
+*.patch -text

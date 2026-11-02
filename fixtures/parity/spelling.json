@@ -1,0 +1,39 @@
+{
+  "about": "Search spelling correction (\"Did you mean\"): what a title search was most likely meant to be, judged against a catalogue of titles. Android's answers (TitleSpelling.kt). `expect` null means no correction: the query is spelled like a title, is still being typed, or is not close enough to anything to guess.",
+  "titles": [
+    { "id": 1, "title": "Naruto", "popularity": 900, "adult": false },
+    { "id": 2, "title": "Naruto: Shippuden", "popularity": 800, "adult": false },
+    { "id": 3, "title": "Death Note", "popularity": 950, "adult": false },
+    { "id": 4, "title": "Attack on Titan", "popularity": 990, "adult": false },
+    { "id": 5, "title": "Frieren: Beyond Journey’s End", "popularity": 600, "adult": false },
+    { "id": 6, "title": "Notes on Monstropedia", "popularity": 2, "adult": false },
+    { "id": 7, "title": "Hunter x Hunter (2011)", "popularity": 850, "adult": false },
+    { "id": 8, "title": "Nauru Holiday", "popularity": 1, "adult": false },
+    { "id": 9, "title": "Bible Black", "popularity": 400, "adult": true },
+    { "id": 10, "title": "86", "popularity": 300, "adult": false },
+    { "id": 11, "title": "ONE PIECE", "popularity": 980, "adult": false },
+    { "id": 12, "title": "Peace Maker Kurogane", "popularity": 50, "adult": false }
+  ],
+  "cases": [
+    { "query": "naurto", "hideAdult": true, "expect": "naruto", "offers": [1, 2], "note": "Nauru Holiday is as close; Naruto is the one people watch" },
+    { "query": "atack on titan", "hideAdult": true, "expect": "attack on titan" },
+    { "query": "freiren", "hideAdult": true, "expect": "frieren", "note": "a swap of neighbouring letters is one slip" },
+    { "query": "one peace", "hideAdult": true, "expect": "one piece", "note": "every word is a real word; only the phrase is wrong" },
+    { "query": "deth note", "hideAdult": true, "expect": "death note" },
+    { "query": "naruto", "hideAdult": true, "expect": null },
+    { "query": "Attack on Titan", "hideAdult": true, "expect": null },
+    { "query": "hunter x hunter", "hideAdult": true, "expect": null },
+    { "query": "naruto shippuden", "hideAdult": true, "expect": null, "note": "punctuation is not a misspelling" },
+    { "query": "beyond journeys end", "hideAdult": true, "expect": null, "note": "nor is an apostrophe" },
+    { "query": "naru", "hideAdult": true, "expect": null, "note": "still being typed" },
+    { "query": "attack on ti", "hideAdult": true, "expect": null, "note": "still being typed" },
+    { "query": "death not", "hideAdult": true, "expect": null, "note": "still being typed: the last word starts a title word" },
+    { "query": "atack on ti", "hideAdult": true, "expect": "attack on ti", "note": "the half-typed last word is kept as typed" },
+    { "query": "87", "hideAdult": true, "expect": null, "note": "numbers are names: one digit off is a different show" },
+    { "query": "xy", "hideAdult": true, "expect": null, "note": "two letters are never corrected" },
+    { "query": "bibel black", "hideAdult": true, "expect": null, "note": "an adult title is never offered while those are hidden" },
+    { "query": "bibel black", "hideAdult": false, "expect": "bible black" },
+    { "query": "naurto death", "hideAdult": true, "expect": "naruto death", "note": "no title has the words in this order: corrected one by one" },
+    { "query": "zzzzqqq", "hideAdult": true, "expect": null, "note": "nothing close enough is no suggestion" }
+  ]
+}
