@@ -32,4 +32,51 @@ React/shadcn interface.
   - Remembered window size.
   - Signed updates.
 
-See [AGENTS.md](AGENTS.md) for layout, rules and commands.
+## Running on NixOS
+
+This repository includes a flake for a reproducible Linux build:
+
+```sh
+# Build the package
+nix build .#default
+
+# Run it without installing
+./result/bin/anilili-desktop
+
+# Development shell (Rust, Node, pnpm, WebKitGTK, GStreamer, mpv)
+nix develop
+
+# Upstream uses npm; package-lock.json is the authoritative lockfile.
+npm install
+npm run tauri dev
+```
+
+The flake exposes `nixosModules.default`:
+
+```nix
+{
+  inputs.anilili.url = "github:SICROMONOCO/desktoprepo1";
+
+  # In a NixOS configuration:
+  imports = [ inputs.anilili.nixosModules.default ];
+  programs.desktoprepo1.enable = true;
+}
+```
+
+The package compiles the Vite frontend before Cargo and enables Tauri's
+`custom-protocol` feature, so the binary embeds the UI instead of pointing at
+`localhost:5173`.
+
+Anime4K shaders, filter lists, and WebAssembly providers are generated into
+`vendor/` and are gitignored. Fetch them before packaging if you want those
+resources bundled:
+
+```sh
+node scripts/fetch-shaders.mjs
+node scripts/fetch-filters.mjs
+node scripts/build-providers.mjs
+```
+
+See [AGENTS.md](AGENTS.md) for layout, rules and commands, and
+[DIAGNOSTICS_REPORT.md](DIAGNOSTICS_REPORT.md) for the Linux runtime image
+diagnostics.
