@@ -11,7 +11,7 @@
   "app": {
     "windows": [],
     "security": {
-      "csp": null
+      "csp": "img-src 'self' asset: https: data: blob:;"
     }
   },
   "plugins": {
