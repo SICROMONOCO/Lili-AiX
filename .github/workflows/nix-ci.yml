@@ -40,4 +40,5 @@ jobs:
           name: anilili-desktop-x86_64-linux
           path: artifact
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 7
