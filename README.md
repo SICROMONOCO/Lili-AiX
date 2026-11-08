@@ -55,7 +55,7 @@ The flake exposes `nixosModules.default`:
 
 ```nix
 {
-  inputs.anilili.url = "github:SICROMONOCO/desktoprepo1";
+  inputs.anilili.url = "github:SICROMONOCO/Lili-AiX";
 
   # In a NixOS configuration:
   imports = [ inputs.anilili.nixosModules.default ];
