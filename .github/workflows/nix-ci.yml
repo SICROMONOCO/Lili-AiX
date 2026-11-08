@@ -1,6 +1,7 @@
 name: "NixOS x86_64 Build & Flake Validation"
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
@@ -26,4 +27,17 @@ jobs:
         run: nix flake check
 
       - name: Build Application Package (x86_64-linux)
-        run: nix build .#packages.x86_64-linux.default --print-build-logs
+        run: nix build .#packages.x86_64-linux.default --print-build-logs --out-link result
+
+      - name: Stage package artifact
+        run: |
+          mkdir -p artifact
+          cp -rL result/. artifact/
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: anilili-desktop-x86_64-linux
+          path: artifact
+          if-no-files-found: error
+          retention-days: 7
