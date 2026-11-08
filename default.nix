@@ -147,19 +147,28 @@ rustPlatform.buildRustPackage {
   '';
 
   # libmpv is dlopen()ed and GStreamer is used by WebKitGTK's embed player, so
-  # both must be on the runtime loader paths. glib-networking and the pixbuf
-  # loaders are pulled into GIO/GDK paths by wrapGAppsHook3 from buildInputs.
+  # both must be on the runtime loader paths. wrapGAppsHook3 supplies the
+  # dconf GIO module; append glib-networking so TLS-backed remote images work
+  # without dropping dconf.
   preFixup = ''
-    # Combine pixbuf loaders manually
+    # Build one GDK pixbuf cache containing the core, SVG and WebP loaders.
+    # gdk-pixbuf-query-loaders takes explicit module paths; a colon-separated
+    # GDK_PIXBUF_MODULEDIR produces an empty cache.
     GDK_PIXBUF_MODULE_FILE="$out/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     mkdir -p "$out/lib/gdk-pixbuf-2.0/2.10.0"
-    GDK_PIXBUF_MODULEDIR="${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders:${webp-pixbuf-loader}/lib/gdk-pixbuf-2.0/2.10.0/loaders" gdk-pixbuf-query-loaders > "$GDK_PIXBUF_MODULE_FILE"
+    gdk-pixbuf-query-loaders \
+      $(find \
+        "${gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders" \
+        "${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders" \
+        "${webp-pixbuf-loader}/lib/gdk-pixbuf-2.0/2.10.0/loaders" \
+        -maxdepth 1 -name '*.so' -print) \
+      > "$GDK_PIXBUF_MODULE_FILE"
 
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ mpv-unwrapped ]}"
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${lib.makeSearchPath "lib/gstreamer-1.0" gstPlugins}"
       --set-default __NV_DISABLE_EXPLICIT_SYNC 1
-      --set GIO_EXTRA_MODULES "${glib-networking}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     )
   '';
